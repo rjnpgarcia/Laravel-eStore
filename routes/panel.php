@@ -14,4 +14,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Route::get('panel', 'PanelController@index')->name('panel');
+
 Route::resource('products', 'ProductController');
