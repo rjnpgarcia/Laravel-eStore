@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 <h1>Your Cart</h1>
-<h4 class="text-center">Total in your cart: <strong>${{$cart->total}}</strong></h4>
+<h4 class="text-center">Total in your cart: <strong>${{$cart->total ?? 0}}</strong></h4>
     @if(!isset($cart) || $cart->products->isEmpty())
         <div class="alert alert-warning">
             Your Cart is empty
