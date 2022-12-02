@@ -39,6 +39,6 @@ Route::resource('products.carts', 'ProductCartController')->only(['store', 'dest
 
 Route::resource('orders.payments', 'OrderPaymentController')->only(['create', 'store']);
 
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Auth::routes([
+    'verify' => true
+]);

@@ -6,6 +6,8 @@ use App\Models\Order;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Services\CartService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class OrderController extends Controller
 {
@@ -42,19 +44,31 @@ class OrderController extends Controller
      */
     public function store(StoreOrderRequest $request)
     {
-        $user = $request->user();
-        $order = $user->orders()->create([
-            'status' => 'pending'
-        ]);
+        return DB::transaction(function () use ($request) {
 
-        $cart = $this->cartService->getCookie();
-        $cartProductWithQuantity = $cart->products
-            ->mapWithKeys(function ($product) {
-                $element[$product->id] = ['quantity' => $product->pivot->quantity];
-                return $element;
-            });
-        $order->products()->attach($cartProductWithQuantity->toArray());
+            $user = $request->user();
+            $order = $user->orders()->create([
+                'status' => 'pending'
+            ]);
 
-        return redirect()->route('orders.payments.create', ['order' => $order->id]);
+            $cart = $this->cartService->getCookie();
+            $cartProductWithQuantity = $cart->products
+                ->mapWithKeys(function ($product) {
+                    $quantity = $product->pivot->quantity;
+                    if ($product->stock < $quantity) {
+                        throw ValidationException::withMessages([
+                            'order' => "{$product->title} doesn't have enough stock for this order"
+                        ]);
+                    }
+
+                    $product->decrement('stock', $quantity);
+
+                    $element[$product->id] = ['quantity' => $quantity];
+                    return $element;
+                });
+            $order->products()->attach($cartProductWithQuantity->toArray());
+
+            return redirect()->route('orders.payments.create', ['order' => $order->id]);
+        }, 5);
     }
 }
