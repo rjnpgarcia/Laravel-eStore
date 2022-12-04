@@ -14,8 +14,6 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
-Route::get('/', 'MainController@index')->name('main');
-
 // Route::get('products', 'ProductController@index')->name('products.index');
 
 // Route::get('products/create', 'ProductController@create')->name('products.create');
@@ -30,6 +28,11 @@ Route::get('/', 'MainController@index')->name('main');
 
 // Route::delete('product/{product}', 'ProductController@delete')->name('products.destroy');
 
+Route::get('/', 'MainController@index')->name('main');
+
+Route::get('profile', 'ProfileController@edit')->name('profile.edit');
+
+Route::put('profile', 'ProfileController@update')->name('profile.update');
 
 Route::resource('carts', 'CartController')->only(['index']);
 
