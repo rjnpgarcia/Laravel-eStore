@@ -1,7 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <h1>Edit a product</h1>
-    <form method="POST" action="{{ route('products.update', ['product' => $product->id]) }}">
+    <form method="POST"
+        action="{{ route('products.update', ['product' => $product->id]) }}"
+        enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="form-row">
@@ -39,6 +41,10 @@
                 </option>
                 @endif
             </select>
+        </div>
+        <div class="form-row">
+            <label for="images">{{ __('Product Images') }}</label>
+            <input class="form-control" name="images[]" type="file" accept="image/*" multiple>
         </div>
         <div class="form-row">
             <button type="submit" class="btn btn-primary btn-lg mt-3">Update Product</button>

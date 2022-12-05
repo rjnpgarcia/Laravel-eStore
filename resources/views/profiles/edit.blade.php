@@ -65,7 +65,7 @@
                             <label for="image" class="col-md-4 col-form-label text-md-end">{{ __('Profile Picture') }}</label>
 
                             <div class="col-md-6">
-                                <input name="image" type="file" accept="images/*">
+                                <input name="image" type="file" accept="image/*">
                             </div>
                         </div>
 

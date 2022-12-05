@@ -1,7 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <h1>Create a product</h1>
-    <form method="POST" action="{{ route('products.store') }}">
+    <form method="POST"
+        action="{{ route('products.store') }}"
+        enctype="multipart/form-data">
         @csrf
         <div class="form-row">
             <label for="">Title</label>
@@ -26,6 +28,10 @@
                 <option value="available" {{ old('status') === 'available' ? 'selected' : ''}}>Available</option>
                 <option value="unavailable" {{ old('status') === 'unavailable' ? 'selected' : ''}}>Unavailable</option>
             </select>
+        </div>
+        <div class="form-row">
+            <label for="images">{{ __('Product Images') }}</label>
+            <input class="form-control" name="images[]" type="file" accept="image/*" multiple>
         </div>
         <div class="form-row">
             <button type="submit" class="btn btn-primary btn-lg mt-3">Create Product</button>
